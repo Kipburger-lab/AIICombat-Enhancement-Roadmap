@@ -1,392 +1,284 @@
-# DreamBot API Reference Guide 📚
+# DreamBot API Reference
 
-Comprehensive reference for DreamBot API usage in the AIICombat enhancement project.
+This document provides comprehensive reference information for the DreamBot API, including core classes, methods, and usage patterns for developing sophisticated OSRS scripts.
 
 ## Core API Classes and Methods
 
 ### Player Management
-```java
-// Players class - Managing player entities
-Players.getLocal()                    // Get local player
-Players.getLocal().isInCombat()      // Check if in combat
-Players.getLocal().getHealthPercent() // Get health percentage
-Players.getLocal().getTile()         // Get current position
-Players.getLocal().isMoving()        // Check if moving
-Players.getLocal().isAnimating()     // Check if animating
-Players.getLocal().getAnimation()    // Get current animation ID
-
-// Player interactions
-Players.getLocal().interact("Walk here");
-Players.getLocal().getRealLevel(Skill.ATTACK);
-Players.getLocal().getCurrentLevel(Skill.HITPOINTS);
-```
+- **getLocalPlayer()**: Returns the local player instance
+- **getPlayers()**: Access to all players in the area
+- **Player.getHealthPercent()**: Get player health percentage
+- **Player.getAnimation()**: Get current player animation
+- **Player.isMoving()**: Check if player is moving
+- **Player.getTile()**: Get player's current tile position
+- **Player.getInteracting()**: Get entity player is interacting with
 
 ### NPC Management
-```java
-// NPCs class - Managing NPC entities
-NPCs.closest("Goblin")               // Find closest NPC by name
-NPCs.closest(npc -> npc.hasAction("Attack"))  // Find by condition
-NPCs.all(npc -> npc.distance() < 10) // Get all NPCs within distance
-
-// NPC properties
-npc.getName()                        // Get NPC name
-npc.getId()                          // Get NPC ID
-npc.getHealthPercent()               // Get health percentage
-npc.isInCombat()                     // Check if in combat
-npc.distance()                       // Distance from player
-npc.hasAction("Attack")              // Check if has specific action
-npc.getTile()                        // Get NPC position
-npc.getBounds()                      // Get screen bounds
-
-// NPC interactions
-npc.interact("Attack");
-npc.interact("Examine");
-```
+- **getNPCs()**: Access to all NPCs in the area
+- **NPC.getHealthPercent()**: Get NPC health percentage
+- **NPC.isInCombat()**: Check if NPC is in combat
+- **NPC.getInteracting()**: Get entity NPC is interacting with
+- **NPC.distance()**: Calculate distance to NPC
+- **NPC.interact()**: Interact with NPC
 
 ### Combat System
-```java
-// Combat class - Combat-related methods
-Combat.getAttackStyle()              // Get current attack style
-Combat.setAttackStyle(AttackStyle.ACCURATE);
-Combat.getSpecialPercentage()        // Get special attack percentage
-Combat.toggleSpecialAttack(true)     // Toggle special attack
-Combat.isAutoRetaliateOn()           // Check auto-retaliate status
-Combat.toggleAutoRetaliate(true)     // Toggle auto-retaliate
-
-// Attack styles
-AttackStyle.ACCURATE
-AttackStyle.AGGRESSIVE
-AttackStyle.DEFENSIVE
-AttackStyle.CONTROLLED
-```
+- **getCombat()**: Access combat methods
+- **Combat.isInCombat()**: Check if player is in combat
+- **Combat.getTarget()**: Get current combat target
+- **Combat.attack()**: Attack specified target
+- **Combat.setAutoRetaliate()**: Enable/disable auto retaliate
+- **Combat.getWildernessLevel()**: Get wilderness level
+- **Combat.canAttack()**: Check if target can be attacked
 
 ### Inventory Management
-```java
-// Inventory class - Inventory operations
-Inventory.contains("Lobster")         // Check if contains item
-Inventory.count("Coins")              // Count specific items
-Inventory.isFull()                   // Check if inventory is full
-Inventory.isEmpty()                  // Check if inventory is empty
-Inventory.getEmptySlots()            // Get number of empty slots
-
-// Item interactions
-Item food = Inventory.get("Lobster");
-if (food != null) {
-    food.interact("Eat");
-}
-
-// Item filtering
-Inventory.all(item -> item.getName().contains("potion"));
-Inventory.onlyContains("Lobster", "Sword", "Shield");
-```
+- **getInventory()**: Access inventory methods
+- **Inventory.contains()**: Check if inventory contains item
+- **Inventory.count()**: Count items in inventory
+- **Inventory.interact()**: Interact with inventory item
+- **Inventory.drop()**: Drop item from inventory
+- **Inventory.use()**: Use item on target
+- **Inventory.getEmptySlots()**: Get number of empty slots
+- **Inventory.isFull()**: Check if inventory is full
 
 ### Equipment Management
-```java
-// Equipment class - Equipment operations
-Equipment.contains("Rune sword")     // Check if wearing item
-Equipment.get(EquipmentSlot.WEAPON)  // Get equipped weapon
-Equipment.get(EquipmentSlot.SHIELD)  // Get equipped shield
-
-// Equipment slots
-EquipmentSlot.HELMET
-EquipmentSlot.CAPE
-EquipmentSlot.AMULET
-EquipmentSlot.WEAPON
-EquipmentSlot.CHEST
-EquipmentSlot.SHIELD
-EquipmentSlot.LEGS
-EquipmentSlot.GLOVES
-EquipmentSlot.BOOTS
-EquipmentSlot.RING
-EquipmentSlot.AMMO
-```
+- **getEquipment()**: Access equipment methods
+- **Equipment.contains()**: Check if equipment contains item
+- **Equipment.getWeapon()**: Get equipped weapon
+- **Equipment.getArmour()**: Get equipped armour pieces
+- **Equipment.interact()**: Interact with equipped item
 
 ### Prayer System
-```java
-// Prayer class - Prayer management
-Prayer.getPrayerPoints()             // Get current prayer points
-Prayer.PROTECT_FROM_MELEE.isActive() // Check if prayer is active
-Prayer.PROTECT_FROM_MELEE.toggle(true); // Activate/deactivate prayer
-
-// Common prayers
-Prayer.THICK_SKIN
-Prayer.BURST_OF_STRENGTH
-Prayer.CLARITY_OF_THOUGHT
-Prayer.PROTECT_FROM_MELEE
-Prayer.PROTECT_FROM_MISSILES
-Prayer.PROTECT_FROM_MAGIC
-Prayer.EAGLE_EYE
-Prayer.MYSTIC_MIGHT
-Prayer.PIETY
-```
+- **getPrayer()**: Access prayer methods
+- **Prayer.isActive()**: Check if prayer is active
+- **Prayer.toggle()**: Toggle prayer on/off
+- **Prayer.getPoints()**: Get current prayer points
+- **Prayer.canUse()**: Check if prayer can be used
 
 ### Movement and Walking
-```java
-// Walking class - Movement operations
-Walking.walk(tile)                   // Walk to specific tile
-Walking.walkExact(tile)              // Walk to exact tile
-Walking.isRunEnabled()               // Check if run is enabled
-Walking.toggleRun(true)              // Toggle run mode
-Walking.getDestination()             // Get current destination
-Walking.isMoving()                   // Check if currently moving
-
-// Pathfinding
-Walking.shouldWalk(5)                // Check if should walk (distance threshold)
-Walking.getRunEnergy()               // Get current run energy
-```
+- **getWalking()**: Access walking methods
+- **Walking.walk()**: Walk to specified tile/area
+- **Walking.walkPath()**: Walk along specified path
+- **Walking.isRunEnabled()**: Check if run is enabled
+- **Walking.setRun()**: Enable/disable running
+- **Walking.getDestination()**: Get current walking destination
+- **Walking.isMoving()**: Check if player is moving
 
 ### Ground Items
-```java
-// GroundItems class - Ground item management
-GroundItems.closest("Coins")         // Find closest ground item
-GroundItems.all(item -> item.getValue() > 100); // Filter by value
-
-// Ground item properties
-groundItem.getName()                 // Get item name
-groundItem.getId()                   // Get item ID
-groundItem.getAmount()               // Get item amount
-groundItem.getValue()                // Get item value
-groundItem.distance()                // Distance from player
-groundItem.getTile()                 // Get item position
-
-// Ground item interactions
-groundItem.interact("Take");
-```
+- **getGroundItems()**: Access ground items
+- **GroundItem.interact()**: Interact with ground item
+- **GroundItem.distance()**: Calculate distance to item
+- **GroundItem.getTile()**: Get item's tile position
 
 ### Banking
-```java
-// Bank class - Banking operations
-Bank.isOpen()                        // Check if bank is open
-Bank.open()                          // Open bank
-Bank.close()                         // Close bank
-Bank.contains("Lobster")             // Check if bank contains item
-Bank.count("Coins")                  // Count items in bank
-
-// Banking operations
-Bank.deposit("Lobster", 10)          // Deposit specific amount
-Bank.depositAll("Lobster")           // Deposit all of item
-Bank.depositAllExcept("Sword", "Shield"); // Deposit all except specified
-Bank.withdraw("Lobster", 10)         // Withdraw specific amount
-Bank.withdrawAll("Lobster")          // Withdraw all of item
-```
+- **getBank()**: Access banking methods
+- **Bank.isOpen()**: Check if bank is open
+- **Bank.open()**: Open bank interface
+- **Bank.close()**: Close bank interface
+- **Bank.contains()**: Check if bank contains item
+- **Bank.withdraw()**: Withdraw items from bank
+- **Bank.deposit()**: Deposit items to bank
+- **Bank.depositAll()**: Deposit all items
+- **Bank.depositAllExcept()**: Deposit all except specified items
 
 ### Interface and Tabs
-```java
-// Tabs class - Game tab management
-Tabs.open(Tab.INVENTORY)             // Open inventory tab
-Tabs.open(Tab.STATS)                 // Open stats tab
-Tabs.open(Tab.COMBAT)                // Open combat tab
-Tabs.open(Tab.PRAYER)                // Open prayer tab
-Tabs.isOpen(Tab.INVENTORY)           // Check if tab is open
-
-// Available tabs
-Tab.COMBAT
-Tab.STATS
-Tab.QUEST
-Tab.INVENTORY
-Tab.EQUIPMENT
-Tab.PRAYER
-Tab.MAGIC
-Tab.CLAN
-Tab.FRIENDS
-Tab.ACCOUNT
-Tab.LOGOUT
-Tab.SETTINGS
-Tab.EMOTES
-Tab.MUSIC
-```
+- **getTabs()**: Access game tabs
+- **Tabs.open()**: Open specified tab
+- **Tabs.isOpen()**: Check if tab is open
+- **getDialogues()**: Access dialogue system
+- **Dialogues.inDialogue()**: Check if in dialogue
+- **Dialogues.continueDialogue()**: Continue dialogue
+- **Dialogues.selectOption()**: Select dialogue option
 
 ### Camera Control
-```java
-// Camera class - Camera management
-Camera.getYaw()                      // Get current yaw (rotation)
-Camera.getPitch()                    // Get current pitch (angle)
-Camera.rotateToYaw(180)              // Rotate to specific yaw
-Camera.rotateToPitch(90)             // Rotate to specific pitch
-Camera.rotateToEntity(npc)           // Rotate camera to entity
-```
+- **getCamera()**: Access camera methods
+- **Camera.rotateToTile()**: Rotate camera to tile
+- **Camera.rotateTo()**: Rotate camera to angle
+- **Camera.mouseRotate()**: Rotate using mouse
+- **Camera.getPitch()**: Get camera pitch
+- **Camera.getYaw()**: Get camera yaw
 
 ### Mouse and Keyboard
-```java
-// Mouse class - Mouse operations
-Mouse.click(x, y)                    // Click at coordinates
-Mouse.move(x, y)                     // Move mouse to coordinates
-Mouse.getPosition()                  // Get current mouse position
-Mouse.isPressed()                    // Check if mouse is pressed
-
-// Keyboard class - Keyboard operations
-Keyboard.type("Hello world")         // Type text
-Keyboard.pressKey(KeyEvent.VK_ENTER) // Press specific key
-Keyboard.holdKey(KeyEvent.VK_SHIFT)  // Hold key down
-Keyboard.releaseKey(KeyEvent.VK_SHIFT); // Release key
-```
+- **getMouse()**: Access mouse methods
+- **Mouse.click()**: Click at coordinates
+- **Mouse.move()**: Move mouse to coordinates
+- **Mouse.drag()**: Drag mouse between coordinates
+- **getKeyboard()**: Access keyboard methods
+- **Keyboard.type()**: Type text
+- **Keyboard.pressKey()**: Press specific key
 
 ### Utilities
-```java
-// Sleep class - Timing utilities
-Sleep.sleep(1000)                    // Sleep for milliseconds
-Sleep.sleepUntil(() -> condition, 5000); // Sleep until condition or timeout
-Sleep.sleepWhile(() -> condition, 5000); // Sleep while condition is true
+- **Timer**: Time-based operations
+- **Sleep**: Delay execution
+- **Random**: Generate random values
+- **Condition**: Wait for conditions
+- **Filter**: Filter collections
 
-// Random class - Random number generation
-Random.nextInt(100)                  // Random integer 0-99
-Random.nextDouble()                  // Random double 0.0-1.0
-Random.nextGaussian()                // Random gaussian distribution
+### Grand Exchange System
+- **getGrandExchange()**: Access Grand Exchange methods
+- **GrandExchange.isOpen()**: Check if GE interface is open
+- **GrandExchange.open()**: Open Grand Exchange interface
+- **GrandExchange.close()**: Close Grand Exchange interface
+- **GrandExchange.buyItem()**: Place buy offer for item
+- **GrandExchange.sellItem()**: Place sell offer for item
+- **GrandExchange.getOffers()**: Get current GE offers
+- **GrandExchange.collectOffer()**: Collect completed offer
+- **GrandExchange.cancelOffer()**: Cancel active offer
+- **GrandExchange.getOfferStatus()**: Get status of specific offer
+- **GrandExchange.setPrice()**: Set price for offer
+- **GrandExchange.setQuantity()**: Set quantity for offer
 
-// Calculate class - Mathematical utilities
-Calculate.distanceBetween(tile1, tile2); // Distance between tiles
-Calculate.getRandomBetween(min, max);     // Random number in range
-```
+### Live Prices System
+- **getLivePrices()**: Access live price data
+- **LivePrices.get()**: Get current price for item
+- **LivePrices.getAverage()**: Get average price for item
+- **LivePrices.getHigh()**: Get high price for item
+- **LivePrices.getLow()**: Get low price for item
+- **LivePrices.getLastUpdate()**: Get last price update time
+- **LivePrices.isAvailable()**: Check if price data is available
+- **LivePrices.getMarginData()**: Get profit margin information
+- **LivePrices.getTrend()**: Get price trend data
+
+### Widget System
+- **getWidgets()**: Access widget methods
+- **Widgets.get()**: Get widget by ID
+- **Widgets.getWidgetChild()**: Get child widget
+- **Widgets.isVisible()**: Check if widget is visible
+- **Widgets.interact()**: Interact with widget
+- **Widgets.getText()**: Get widget text content
+- **Widgets.getChildren()**: Get all child widgets
+- **Widgets.find()**: Find widgets matching criteria
+- **Widget.click()**: Click on widget
+- **Widget.hover()**: Hover over widget
+- **Widget.getBounds()**: Get widget boundaries
+- **Widget.getItemId()**: Get item ID from widget
+- **Widget.getItemAmount()**: Get item amount from widget
 
 ## Advanced API Usage Patterns
 
 ### Conditional Waiting
 ```java
-// Wait for combat to start
-Sleep.sleepUntil(() -> Players.getLocal().isInCombat(), 3000);
+// Wait for condition with timeout
+Condition.wait(() -> getLocalPlayer().isMoving(), 5000, 100);
 
-// Wait for movement to complete
-Sleep.sleepUntil(() -> !Players.getLocal().isMoving(), 5000);
+// Wait for combat to end
+Condition.wait(() -> !getCombat().isInCombat(), 10000, 500);
 
-// Wait for animation to finish
-Sleep.sleepUntil(() -> !Players.getLocal().isAnimating(), 2000);
-
-// Wait for health to reach threshold
-Sleep.sleepUntil(() -> Players.getLocal().getHealthPercent() > 50, 10000);
+// Wait for inventory change
+Condition.wait(() -> getInventory().contains("Logs"), 3000, 200);
 ```
 
 ### Entity Filtering
 ```java
-// Complex NPC filtering
-NPC target = NPCs.closest(npc -> 
-    npc != null &&
-    npc.hasAction("Attack") &&
-    !npc.isInCombat() &&
-    npc.getHealthPercent() > 0 &&
-    npc.distance() <= 10 &&
-    Arrays.asList("Goblin", "Cow").contains(npc.getName())
+// Filter NPCs by name and combat status
+List<NPC> targets = getNPCs().all(npc -> 
+    npc.getName().equals("Goblin") && 
+    !npc.isInCombat() && 
+    npc.getHealthPercent() == 100
 );
 
-// Ground item filtering by value
-List<GroundItem> valuableItems = GroundItems.all(item ->
-    item.getValue() > 1000 &&
-    item.distance() <= 5
-);
-
-// Inventory item filtering
-List<Item> food = Inventory.all(item ->
-    item.getName().contains("fish") ||
-    item.getName().contains("bread") ||
-    item.getName().contains("meat")
+// Filter ground items by value
+List<GroundItem> valuableItems = getGroundItems().all(item -> 
+    getLivePrices().get(item.getID()) > 1000
 );
 ```
 
 ### Area Management
 ```java
-// Define areas
-Area combatArea = new Area(
-    new Tile(3200, 3200, 0),
-    new Tile(3210, 3210, 0)
-);
+// Define combat area
+Area combatArea = new Area(3200, 3200, 3210, 3210);
 
 // Check if player is in area
-if (combatArea.contains(Players.getLocal())) {
-    // Player is in combat area
+if (combatArea.contains(getLocalPlayer())) {
+    // Execute combat logic
 }
 
-// Find NPCs in specific area
-List<NPC> npcsInArea = NPCs.all(npc ->
-    combatArea.contains(npc.getTile())
-);
+// Walk to area if not present
+if (!combatArea.contains(getLocalPlayer())) {
+    getWalking().walk(combatArea.getRandomTile());
+}
 ```
 
 ### State Management
 ```java
-// Comprehensive state checking
 public enum ScriptState {
-    FINDING_TARGET,
-    MOVING_TO_TARGET,
-    ENGAGING_COMBAT,
-    IN_COMBAT,
-    LOOTING,
-    EATING,
     BANKING,
-    IDLE
+    WALKING_TO_COMBAT,
+    FIGHTING,
+    LOOTING,
+    RESTOCKING
 }
 
 public ScriptState getCurrentState() {
-    if (Players.getLocal().isInCombat()) {
-        return ScriptState.IN_COMBAT;
-    }
-    
-    if (Players.getLocal().getHealthPercent() < 50 && hasFood()) {
-        return ScriptState.EATING;
-    }
-    
-    if (Inventory.isFull() && hasValuableLoot()) {
+    if (getInventory().isFull()) {
         return ScriptState.BANKING;
+    } else if (getCombat().isInCombat()) {
+        return ScriptState.FIGHTING;
     }
-    
-    if (hasNearbyLoot()) {
-        return ScriptState.LOOTING;
-    }
-    
-    NPC target = findTarget();
-    if (target != null) {
-        if (target.distance() > 1) {
-            return ScriptState.MOVING_TO_TARGET;
-        } else {
-            return ScriptState.ENGAGING_COMBAT;
-        }
-    }
-    
-    return ScriptState.FINDING_TARGET;
+    // Additional state logic
+    return ScriptState.WALKING_TO_COMBAT;
 }
+```
+
+### Grand Exchange Trading
+```java
+// Check item prices before trading
+int currentPrice = getLivePrices().get(itemId);
+int averagePrice = getLivePrices().getAverage(itemId);
+
+// Place buy offer with margin
+if (getGrandExchange().isOpen()) {
+    getGrandExchange().buyItem(itemId, quantity, currentPrice + 100);
+}
+
+// Monitor offer status
+if (getGrandExchange().getOfferStatus(0) == OfferStatus.COMPLETED) {
+    getGrandExchange().collectOffer(0);
+}
+```
+
+### Widget Interaction
+```java
+// Interact with specific widget
+Widget geWidget = getWidgets().get(465, 7); // GE interface
+if (geWidget != null && geWidget.isVisible()) {
+    geWidget.click();
+}
+
+// Find and interact with dynamic widgets
+List<Widget> buttons = getWidgets().find(w -> 
+    w.getText().contains("Buy") && w.isVisible()
+);
 ```
 
 ## Error Handling Best Practices
 
 ### Null Checking
 ```java
-// Always check for null entities
-NPC target = NPCs.closest("Goblin");
-if (target != null && target.hasAction("Attack")) {
-    if (target.interact("Attack")) {
-        Sleep.sleepUntil(() -> Players.getLocal().isInCombat(), 3000);
-    }
-}
-
-// Safe item interactions
-Item food = Inventory.get("Lobster");
-if (food != null && food.interact("Eat")) {
-    Sleep.sleepUntil(() -> 
-        Players.getLocal().getHealthPercent() > previousHealth, 2000);
+Player target = getPlayers().closest("PlayerName");
+if (target != null && target.isValid()) {
+    // Safe to interact
+    target.interact("Trade with");
 }
 ```
 
 ### Exception Handling
 ```java
-// Wrap risky operations in try-catch
 try {
-    if (Bank.open()) {
-        Sleep.sleepUntil(() -> Bank.isOpen(), 3000);
-        Bank.depositAllExcept("Weapon", "Shield");
-    }
+    getWalking().walk(destinationTile);
 } catch (Exception e) {
-    Logger.error("Banking error: " + e.getMessage());
-    // Implement recovery logic
+    log("Walking failed: " + e.getMessage());
+    // Implement fallback logic
 }
 ```
 
 ### Timeout Handling
 ```java
-// Always use timeouts for sleepUntil
-boolean success = Sleep.sleepUntil(() -> 
-    Players.getLocal().isInCombat(), 5000);
-    
-if (!success) {
-    Logger.warn("Failed to enter combat within timeout");
-    // Implement fallback logic
+long timeout = System.currentTimeMillis() + 10000;
+while (System.currentTimeMillis() < timeout) {
+    if (condition) {
+        break;
+    }
+    sleep(100);
 }
 ```
 
@@ -394,22 +286,18 @@ if (!success) {
 
 ### Efficient Entity Queries
 ```java
+// Use closest() instead of iterating all entities
+NPC target = getNPCs().closest("Goblin");
+
 // Cache frequently accessed entities
 private NPC cachedTarget;
 private long lastTargetUpdate;
 
 public NPC getTarget() {
-    long currentTime = System.currentTimeMillis();
-    
-    // Update cache every 1 second
-    if (currentTime - lastTargetUpdate > 1000 || 
-        cachedTarget == null || 
-        !cachedTarget.exists()) {
-        
-        cachedTarget = NPCs.closest("Goblin");
-        lastTargetUpdate = currentTime;
+    if (System.currentTimeMillis() - lastTargetUpdate > 1000) {
+        cachedTarget = getNPCs().closest("Goblin");
+        lastTargetUpdate = System.currentTimeMillis();
     }
-    
     return cachedTarget;
 }
 ```
@@ -417,28 +305,25 @@ public NPC getTarget() {
 ### Minimize API Calls
 ```java
 // Store frequently used values
-Player localPlayer = Players.getLocal();
-int currentHealth = localPlayer.getHealthPercent();
-boolean inCombat = localPlayer.isInCombat();
+Player localPlayer = getLocalPlayer();
 Tile playerTile = localPlayer.getTile();
+int playerHealth = localPlayer.getHealthPercent();
 
 // Use stored values instead of repeated API calls
-if (currentHealth < 50 && !inCombat) {
-    eatFood();
+if (playerHealth < 30) {
+    // Emergency logic
 }
 ```
 
 ### Conditional Processing
 ```java
 // Only process when necessary
-if (Players.getLocal().isInCombat()) {
+if (getCombat().isInCombat()) {
+    // Combat-specific logic only when in combat
     handleCombat();
-} else if (shouldEat()) {
-    eatFood();
-} else if (shouldLoot()) {
-    lootItems();
-} else {
-    findAndAttackTarget();
+} else if (getInventory().isFull()) {
+    // Banking logic only when inventory is full
+    handleBanking();
 }
 ```
 
@@ -446,39 +331,81 @@ if (Players.getLocal().isInCombat()) {
 
 ### Creating Custom Panels
 ```java
-// Extend DreamBot's UI components
-public class CombatConfigPanel extends JPanel {
-    @Override
-    public void onStart() {
-        // Initialize UI components
-        setLayout(new GridBagLayout());
-        
-        // Add configuration options
-        addTargetSelection();
-        addCombatSettings();
-        addAntiBanSettings();
+public class ScriptGUI extends JPanel {
+    private JLabel statusLabel;
+    private JButton startButton;
+    
+    public ScriptGUI() {
+        setLayout(new BorderLayout());
+        initializeComponents();
     }
     
-    private void addTargetSelection() {
-        JComboBox<String> targetCombo = new JComboBox<>();
-        targetCombo.addItem("Goblins");
-        targetCombo.addItem("Cows");
-        targetCombo.addItem("Guards");
+    private void initializeComponents() {
+        statusLabel = new JLabel("Status: Idle");
+        startButton = new JButton("Start");
         
-        add(new JLabel("Target:"));
-        add(targetCombo);
+        add(statusLabel, BorderLayout.NORTH);
+        add(startButton, BorderLayout.SOUTH);
+    }
+    
+    public void updateStatus(String status) {
+        SwingUtilities.invokeLater(() -> {
+            statusLabel.setText("Status: " + status);
+        });
     }
 }
 ```
 
 ### Real-time Updates
 ```java
-// Update UI from script thread
-SwingUtilities.invokeLater(() -> {
-    statsPanel.updateXP(getXPGained());
-    statsPanel.updateProfit(getProfit());
-    statsPanel.updateRuntime(getRuntime());
-});
+// Update GUI with current script state
+public void onLoop() {
+    if (gui != null) {
+        gui.updateStatus(getCurrentState().toString());
+        gui.updateStats(getExperienceGained(), getItemsLooted());
+    }
+}
 ```
 
-This reference guide provides comprehensive coverage of the DreamBot API methods and patterns most relevant to combat script development. Use this as a quick reference while implementing the enhancement roadmap.
+## Price Checking and Market Analysis
+
+### Real-time Price Monitoring
+```java
+// Monitor price changes
+public void monitorPrices(int itemId) {
+    int currentPrice = getLivePrices().get(itemId);
+    int averagePrice = getLivePrices().getAverage(itemId);
+    
+    if (currentPrice < averagePrice * 0.9) {
+        // Price is 10% below average - good buy opportunity
+        log("Buy opportunity detected for item: " + itemId);
+    }
+}
+
+// Calculate profit margins
+public int calculateProfit(int itemId, int buyPrice, int sellPrice) {
+    int geFeeBuy = (int) (buyPrice * 0.01); // 1% GE fee
+    int geFeeSell = (int) (sellPrice * 0.01);
+    return sellPrice - buyPrice - geFeeBuy - geFeeSell;
+}
+```
+
+### Market Trend Analysis
+```java
+// Analyze price trends
+public boolean isPriceRising(int itemId) {
+    // Implementation would track price history
+    return getLivePrices().getTrend(itemId) > 0;
+}
+
+// Find profitable items
+public List<Integer> findProfitableItems(List<Integer> itemIds) {
+    return itemIds.stream()
+        .filter(id -> calculateProfit(id, 
+            getLivePrices().getLow(id), 
+            getLivePrices().getHigh(id)) > 1000)
+        .collect(Collectors.toList());
+}
+```
+
+This reference provides the foundation for building sophisticated, efficient, and user-friendly OSRS scripts using the DreamBot API. Always ensure your scripts follow DreamBot's terms of service and OSRS rules.
